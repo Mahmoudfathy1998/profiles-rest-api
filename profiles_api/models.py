@@ -23,13 +23,14 @@ class UserProfileManager(BaseUserManager):
         
         return user
     
-    def createSuperUser(self, email, name, password):
+    #OverRides the createsuperadmin django function
+    def create_superuser(self, email, name, password):
         """Create and save a new superuser with given details"""
         #self is automattically passed in when you call from any class function.
         user = self.createUser(email, name, password)
         
         user.is_superuser = True #This is automatically created in the model by the premissionsMixin
-        user.isStaff = True
+        user.is_staff = True #its name is predifined in django
         user.save(using=self._db)
         
         return user
@@ -41,7 +42,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     isActive = models.BooleanField(default=True)
-    isStaff = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
     
     #Create a manager so Django knows how to work with this custom user model in django CLI tools 'CreateSuperUser for ex.'
     objects = UserProfileManager()
