@@ -123,3 +123,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'profiles_api.UserProfile' ## CONTENT SEQ: 3rd Look at our profiles app and look in the models for userprofile and use it for all of our auth and user registeration
