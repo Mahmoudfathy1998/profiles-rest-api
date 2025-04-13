@@ -8,6 +8,7 @@ from profiles_api import views
 #CONTENT SEQ 11th
 router = DefaultRouter() # Step one for using a router. Assign a router to a variable.
 router.register('helloviewset', views.HelloViewSet, basename='helloviewset')
+router.register('profile', views.UserProfileViewSet) #no need to specify base name as we have a queryset object, Django figures out the name from the model thats assigned to it
 # Step two use this to register specific view sets with our router pass it the name of our viewset, the viewset itself, basename for retrieving the urls in our router
 
 #CONTENT SEQ 6th
