@@ -3,6 +3,7 @@ from rest_framework.response import Response #GET usage.
 from rest_framework import status #POST  usage.
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
+from rest_framework import filters
 
 from profiles_api import serializers #POST usage.
 from profiles_api import models
@@ -124,3 +125,6 @@ class UserProfileViewSet(viewsets.ModelViewSet): # To use the model view set is 
     authentication_classes = (TokenAuthentication, ) # Remember to add comma after token auth as its a tuple. This adds all the auth classes to this variable
     #How the user gets permission to do certain things.
     permission_classes = (permissions.UpdateOwnProfile,)
+    # Adding a filter backend for the search filter and then specify the search fields
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name','email', )
