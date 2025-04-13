@@ -14,6 +14,7 @@ router.register('profile', views.UserProfileViewSet) #no need to specify base na
 #CONTENT SEQ 6th
 urlpatterns = [
     path('helloView/', views.HelloApiView.as_view()), #as_views is a standard function used to convert our apiview class to be rendered by our urls
+    path('login/', views.UserLoginApiView.as_view()), #enables login end point in the DRF
     path('', include(router.urls)),
                             
 ]
