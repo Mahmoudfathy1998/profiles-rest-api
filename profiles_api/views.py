@@ -6,6 +6,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework import filters
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
+from rest_framework.permissions import IsAuthenticatedOrReadOnly ,IsAuthenticated
 
 from profiles_api import serializers #POST usage.
 from profiles_api import models
@@ -136,3 +137,25 @@ class UserLoginApiView(ObtainAuthToken):
     """Handle creating user authentication tokens"""
     #adds the rendere classes to the obtainauthtoken which will enable it in the django admin as obtainAuthToken doesnt have it bydefault
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+    
+
+class UserProfileFeedViewSet(viewsets.ModelViewSet):
+    """Handles creating,reading,updating profile feed items"""
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = serializers.ProfileFeedItemSerializer
+    queryset = models.ProfileFeedItem.objects.all()#manage all of our profileFeedItem objects from a model in our viewset
+    permission_classes = (
+        permissions.UpdateOwnStatus,
+        #IsAuthenticatedOrReadOnly #This makes sure that a user must be authenticated perform anyrequest that's not a read request. User cannot create a new feeditem if they'rent authenticated
+        IsAuthenticated # used in case no access to the read only requests as well
+    )
+    
+    #This is a handy feature in DRF that allows you to override/customize the behavior for creating an object for a modelviewset, When a request is made to the viewset it get passed into
+    #our serializer class and validate it and then serilaizer.save is called by default.
+    # This is called everytime you do HTTP POST to the viewset
+    def perform_create(self, serializer):
+        #we did this in order to apply the readonly for the userprofile attr
+        """Sets the user profile to the logged in user."""
+        serializer.save(userProfile=self.request.user) #request is passed by defualt for the viewsets and if the user is authenticated. user will be added to the request, this user_profile pass to the serializer
+                                                        #in addition to the items that's being passed to it thats being validated
+        

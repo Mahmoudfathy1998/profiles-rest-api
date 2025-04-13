@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
+from django.conf import settings #to import settings from our django project
 
 # CONTENT SEQ: 2nd
 class UserProfileManager(BaseUserManager):
@@ -62,3 +63,19 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """Return string representation of our user"""
         return self.email
+
+
+# Content SEQ 12th after login and auth.
+class ProfileFeedItem(models.Model):
+    """Profile Status update"""
+    userProfile = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    statusText = models.CharField(max_length=255)
+    createdOn = models.DateTimeField(auto_now_add=True)
+    
+    #what to do when we turn a model instance into a string
+    def __str__(self):
+        """Return the model as a string"""
+        return self.statusText

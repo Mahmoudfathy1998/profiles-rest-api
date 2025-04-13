@@ -41,3 +41,18 @@ class UserProfileSerializer(serializers.ModelSerializer): # ModelSerialzers is u
         )
         
         return user
+    
+    
+    
+class ProfileFeedItemSerializer(serializers.ModelSerializer):
+    """Serializes profile feed items"""
+    
+    class Meta:
+        model = models.ProfileFeedItem # sets this serializer to this model
+        fields = ('id', 'userProfile','statusText','createdOn')
+        
+        extra_kwargs = {
+            'userProfile': {
+                'read_only': True, # for user to not being able to create a feed for another user or assign it to another user
+            }
+        }
