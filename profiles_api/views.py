@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response #GET usage.
 from rest_framework import status #POST  usage.
+from rest_framework import viewsets
 
 from profiles_api import serializers #POST usage.
 
@@ -55,3 +56,57 @@ class HelloApiView(APIView):
     def delete(self, request, pk=None):
         """Delete an object"""
         return Response({'method': 'DELETE'})
+    
+    
+# CONTENT SEQ 10th Can be replaced with CONTENT SEQ 5th
+class HelloViewSet(viewsets.ViewSet): #.viewset is the base django viewset class that django provides
+    """Test API ViewSet"""
+    
+    def list(self, request):
+        """Return a hello message."""
+        viewsetList = [
+            'Uses actions (list, create, retrieve, update, partial_update)',
+            'Automatically mapts to URLs using Routers',
+            'Provides more functionality with less code'
+        ]
+        return Response({
+            'message': 'Hello!',
+            'viewSetList': viewsetList
+            });
+    
+    def create(self, request):
+        """Create a new hello message"""
+        userData = request.data
+        message = f'Hello {userData.get('name')}'
+        return Response({
+            'message': message
+        })
+        
+    
+    def retrieve(self, request, pk=None):
+        """Handle getting an object by its ID"""
+        return Response({
+            'httpMethod': 'GET'
+        })
+        
+        
+    def update(self, request, pk=None):
+        """Handle updating an object"""
+        return Response({
+            'httpMethod': f'PUT {request.data.get('name')}'
+        })
+        
+        
+    
+    def partial_update(self, request, pk=None):
+        """Handle updating part of an object"""
+        return Response({
+            'httpMethod': 'PATCH'
+        })
+        
+        
+    def destroy(self, request, pk=None):
+        """Handle removing an object"""
+        return Response({
+            'httpMethod': 'DELETE'
+        })
